@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Unlicense
+
 SHELL = /bin/sh
 .DELETE_ON_ERROR:
 
