@@ -25,7 +25,7 @@ data/%/mboxes: data/%/index
 
 mbox/$(LIST).mbox.gz: data/$(LIST)/mboxes
 	@mkdir -p $(@D)
-	curl -f $(foreach MBOX,$(shell cat $<),-z data/$(LIST)/$(MBOX) -o data/$(LIST)/$(MBOX) $(URL)$(MBOX))
+	curl -f $(foreach MBOX,$(shell cat $<),-: -z data/$(LIST)/$(MBOX) -o data/$(LIST)/$(MBOX) $(URL)$(MBOX))
 	cat $(addprefix data/$(LIST)/,$(shell cat $<)) > $@
 CLEAN += mbox/$(LIST).mbox.gz
 DISTCLEAN += $(wildcard data/$(LIST)/*)
