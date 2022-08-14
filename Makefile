@@ -12,25 +12,29 @@ endif
 
 LIST = $(lastword $(subst /, ,$(URL)))
 
+CURL = curl -fsSRL --retry 3 -o $(2) $(if $(shell test -f $(2) && echo y),-z $(2) )$(1)
+
 .PHONY: all
-all: INDEX = data/$(LIST)/index
-all:
-	@mkdir -p $(dir $(INDEX))
-	curl -f -z $(INDEX) -o $(INDEX) $(URL)
-	make mbox/$(LIST).mbox.gz URL=$(URL)
-CLEAN += data/$(LIST)/index
+all: cache/$(LIST)/mboxes
+	make $(LIST).mbox.gz URL=$(URL)
 
-data/%/mboxes: data/%/index
-	sed -ne 's/.*"\([^.]\+\.txt\.gz\)".*/\1/ p' $< > $@
-CLEAN += data/$(LIST)/mboxes
+$(LIST).mbox.gz: $(foreach MBOX,$(shell cat cache/$(LIST)/mboxes),cache/$(LIST)/$(MBOX)) | cache/$(LIST)/mboxes
+	find cache/$(LIST) -type f -name '*.txt.gz' | xargs cat > $@
+	@chmod 444 $@
+CLEAN += $(wildcard *.mbox.gz)
 
-mbox/$(LIST).mbox.gz: data/$(LIST)/mboxes
+cache/$(LIST)/index:
 	@mkdir -p $(@D)
-	curl -f $(foreach MBOX,$(shell cat $<),-: -z data/$(LIST)/$(MBOX) -o data/$(LIST)/$(MBOX) $(URL)$(MBOX))
-	echo $(addprefix data/$(LIST)/,$(shell cat $<)) | xargs -r touch -r $<
-	cat $(addprefix data/$(LIST)/,$(shell cat $<)) > $@
-CLEAN += mbox/$(LIST).mbox.gz
-DISTCLEAN += $(filter-out index mboxes,$(wildcard data/$(LIST)/*))
+	$(call CURL,$(URL),$@)
+CLEAN += $(wildcard cache/*/index)
+
+cache/$(LIST)/mboxes: cache/$(LIST)/index
+	sed -ne 's/.*"\([^.]\+\.txt\.gz\)".*/\1/ p' $< > $@
+CLEAN += $(wildcard cache/*/mboxes)
+
+cache/$(LIST)/%.txt.gz:
+	$(call CURL,$(URL)$(@F),$@)
+DISTCLEAN = $(wildcard cache/*/*.txt.gz)
 
 .PHONY: clean
 clean:

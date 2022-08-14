@@ -1,5 +1,5 @@
 .*
 !.gitignore
 
-data
-mbox
+*.mbox.gz
+cache
