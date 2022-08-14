@@ -16,7 +16,7 @@ CURL = curl -fsSRL --retry 3 -o $(2) $(if $(shell test -f $(2) && echo y),-z $(2
 
 .PHONY: all
 all: cache/$(LIST)/mboxes
-	make $(LIST).mbox.gz URL=$(URL)
+	$(MAKE) $(LIST).mbox.gz URL=$(URL)
 
 $(LIST).mbox.gz: $(foreach MBOX,$(shell cat cache/$(LIST)/mboxes),cache/$(LIST)/$(MBOX)) | cache/$(LIST)/mboxes
 	find cache/$(LIST) -type f -name '*.txt.gz' | xargs cat > $@
