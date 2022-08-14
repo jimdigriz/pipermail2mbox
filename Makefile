@@ -20,7 +20,6 @@ all: cache/$(LIST)/mboxes
 
 $(LIST).mbox.gz: $(foreach MBOX,$(shell cat cache/$(LIST)/mboxes),cache/$(LIST)/$(MBOX)) | cache/$(LIST)/mboxes
 	find cache/$(LIST) -type f -name '*.txt.gz' | xargs cat > $@
-	@chmod 444 $@
 CLEAN += $(wildcard *.mbox.gz)
 
 cache/%/index:
