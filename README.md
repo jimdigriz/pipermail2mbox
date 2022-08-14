@@ -15,6 +15,10 @@ Download the mailing list archive with:
 
 Where `<URL>` is the URL to the index page listing all the history of the mailing list.
 
+If you wish to use a SOCKS or HTTP proxy server you may do so by setting `all_proxy` like so:
+
+    all_proxy=socks5://127.0.0.1:9050 make URL=<URL>
+
 Examples:
 
  * [FreeRADIUS users mailing list](https://lists.freeradius.org/mailman/listinfo/freeradius-users):
