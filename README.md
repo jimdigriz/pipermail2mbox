@@ -15,7 +15,13 @@ Download the mailing list archive with:
 
 Where `<URL>` is the URL to the index page listing all the history of the mailing list.
 
-If you wish to use a SOCKS or HTTP proxy server you may do so by setting `all_proxy` like so:
+To update the spool, re-run this command. This will not use much bandwidth as the tool caches the monthly `*.txt.gz` mboxs and will just check the remote server for any updates.
+
+If you wish to download the mailing list in parallel (the example shows using five threads), use:
+
+    make -j5 URL=<URL>
+
+If you wish to use a SOCKS/HTTP proxy server you may do so by setting the environment variable `all_proxy` like so:
 
     all_proxy=socks5://127.0.0.1:9050 make URL=<URL>
 
@@ -29,8 +35,8 @@ Examples:
 
        make URL=https://erlang.org/pipermail/erlang-questions/
 
-   **N.B.** webserver trottles usage so when the downloading stalls, you will need to `Ctrl-C` wait a few minutes and retry
+   **N.B.** webserver trottles usage so when the downloading stalls, you will need to `Ctrl-C` wait a few minutes and retry, this is not too bad as (unfortunately) the mailing list is now a readonly non-posting archive so you only need to do this once
 
-To read the mail, use `mutt` (or `neomutt`, or any other mail client that can read [Mbox format mailboxes](https://en.wikipedia.org/wiki/Mbox)) use:
+Finally, to read the mail, use `mutt` (or `neomutt`, or any other mail client that can read [Mbox format mailboxes](https://en.wikipedia.org/wiki/Mbox)) use:
 
     mutt -Rf freeradius-users.mbox.gz
