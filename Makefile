@@ -20,7 +20,9 @@ all: cache/$(LIST)/mboxes
 	$(MAKE) $(LIST).mbox.gz URL=$(URL) STAGE=2
 
 $(LIST).mbox.gz: $(if $(shell test -f cache/$(LIST)/mboxes && echo y),$(foreach MBOX,$(shell cat cache/$(LIST)/mboxes),cache/$(LIST)/$(MBOX)))
+	@chmod 644 $@
 	find cache/$(LIST) -type f -name '*.txt.gz' | xargs cat > $@
+	@chmod 444 $@
 CLEAN += $(wildcard *.mbox.gz)
 
 cache/$(LIST)/%.txt.gz: cache/$(LIST)/mboxes
