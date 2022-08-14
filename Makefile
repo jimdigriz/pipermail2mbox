@@ -23,12 +23,12 @@ $(LIST).mbox.gz: $(foreach MBOX,$(shell cat cache/$(LIST)/mboxes),cache/$(LIST)/
 	@chmod 444 $@
 CLEAN += $(wildcard *.mbox.gz)
 
-cache/$(LIST)/index:
+cache/%/index:
 	@mkdir -p $(@D)
 	$(call CURL,$(URL),$@)
 CLEAN += $(wildcard cache/*/index)
 
-cache/$(LIST)/mboxes: cache/$(LIST)/index
+cache/%/mboxes: cache/%/index
 	sed -ne 's/.*"\([^.]\+\.txt\.gz\)".*/\1/ p' $< > $@
 CLEAN += $(wildcard cache/*/mboxes)
 
